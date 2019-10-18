@@ -48,7 +48,7 @@ func NewProber(solverManager *SolverManager) *Prober {
 // Solve Looks through the challenge combinations to find a solvable match.
 // Then solves the challenges in series and returns.
 func (p *Prober) Solve(authorizations []acme.Authorization) error {
-	failures := make(obtainError)
+	failures := make(ObtainError)
 
 	var authSolvers []*selectedAuthSolver
 	var authSolversSequential []*selectedAuthSolver
@@ -86,14 +86,14 @@ func (p *Prober) Solve(authorizations []acme.Authorization) error {
 	sequentialSolve(authSolversSequential, failures)
 
 	// Be careful not to return an empty failures map,
-	// for even an empty obtainError is a non-nil error value
+	// for even an empty ObtainError is a non-nil error value
 	if len(failures) > 0 {
 		return failures
 	}
 	return nil
 }
 
-func sequentialSolve(authSolvers []*selectedAuthSolver, failures obtainError) {
+func sequentialSolve(authSolvers []*selectedAuthSolver, failures ObtainError) {
 	for i, authSolver := range authSolvers {
 		// Submit the challenge
 		domain := challenge.GetTargetedDomain(authSolver.authz)
@@ -127,7 +127,7 @@ func sequentialSolve(authSolvers []*selectedAuthSolver, failures obtainError) {
 	}
 }
 
-func parallelSolve(authSolvers []*selectedAuthSolver, failures obtainError) {
+func parallelSolve(authSolvers []*selectedAuthSolver, failures ObtainError) {
 	// For all valid preSolvers, first submit the challenges so they have max time to propagate
 	for _, authSolver := range authSolvers {
 		authz := authSolver.authz

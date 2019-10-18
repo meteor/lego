@@ -6,10 +6,10 @@ import (
 	"sort"
 )
 
-// obtainError is returned when there are specific errors available per domain.
-type obtainError map[string]error
+// ObtainError is returned when there are specific errors available per domain.
+type ObtainError map[string]error
 
-func (e obtainError) Error() string {
+func (e ObtainError) Error() string {
 	buffer := bytes.NewBufferString("acme: Error -> One or more domains had a problem:\n")
 
 	var domains []string
